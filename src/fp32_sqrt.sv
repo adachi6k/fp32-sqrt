@@ -156,18 +156,6 @@ module fp32_sqrt (
         leading_zero_count = count;
     endfunction
 
-    // LUT: 仮数の上位8ビットに基づく1/√xの16ビット近似値
-    function logic [15:0] lut_inv_sqrt(input logic [7:0] index);
-        case (index)
-            8'h00: lut_inv_sqrt = 16'hFFFF;  // 未使用（入力が0の場合を除外）
-            8'h01: lut_inv_sqrt = 16'hB504;  // 1/√0.0078125 ≈ 11.3137
-            8'h02: lut_inv_sqrt = 16'h7FFF;  // 1/√0.015625 ≈ 7.9999
-            8'h03: lut_inv_sqrt = 16'h5A82;  // 1/√0.0234375 ≈ 5.6568
-            8'h04: lut_inv_sqrt = 16'h4000;  // 1/√0.03125 ≈ 4.0000
-            // 以下、256エントリまで事前計算が必要。ここでは一部のみ記載
-            8'hFF: lut_inv_sqrt = 16'h0400;  // 1/√0.99609375 ≈ 1.0020
-            default: lut_inv_sqrt = 16'h0400;  // 仮のデフォルト値
-        endcase
-    endfunction
+    `include "lut_inv_sqrt.svh"
 
 endmodule
